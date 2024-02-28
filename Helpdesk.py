@@ -389,3 +389,4 @@ Button(root, text='Celsius to Farenheit Converter', command=convert).pack()
 Button(root, text='Shapes Calculator', command=shapescalculator).pack()
 Button(root, text='Password Generator', command=passgen).pack()
 # Start the main event loop
+root.mainloop()
