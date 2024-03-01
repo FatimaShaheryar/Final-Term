@@ -1,5 +1,7 @@
 from tkinter import *
 from tkinter import ttk
+from tkinter import messagebox
+import random
 root=Tk()
 root.title("My UI")
 pi=22/7
@@ -328,10 +330,6 @@ def shapescalculator():
 
 #Password generator Abeera
 def passgen():
-    import tkinter as tk
-    from tkinter import messagebox
-    import random
-
     def generate_password():
         uppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
         lowercase = "abcdefghijklmnopqrstuvwxyz"
@@ -347,8 +345,14 @@ def passgen():
             password += numbers
         if special_check_var.get():
             password += special_characters
-        
-        generated_password = "".join(random.sample(password, 9))
+        if not (upper_check_var.get() or lower_check_var.get() or numbers_check_var.get() or special_check_var.get()):
+            messagebox.showerror("Error", "Please select at least one option.")
+            return
+
+        # Ensure that the sample size is not greater than the population size
+        sample_size = min(9, len(password))
+
+        generated_password = "".join(random.choices(password, k=sample_size))
         password_label.config(text=generated_password)
 
     def reset_checkboxes():
@@ -358,30 +362,31 @@ def passgen():
         special_check_var.set(0)
 
     # GUI
-    root = tk.Tk()
-    root.title("Password Generator")
+    password_window = Toplevel(root)
+    password_window.title("Password Generator")
 
-    upper_check_var = tk.IntVar()
-    lower_check_var = tk.IntVar()
-    numbers_check_var = tk.IntVar()
-    special_check_var = tk.IntVar()
+    upper_check_var = IntVar()
+    lower_check_var = IntVar()
+    numbers_check_var = IntVar()
+    special_check_var = IntVar()
 
-    upper_check = tk.Checkbutton(root, text="Uppercase", variable=upper_check_var)
-    upper_check.pack(anchor=tk.W)
-    lower_check = tk.Checkbutton(root, text="Lowercase", variable=lower_check_var)
-    lower_check.pack(anchor=tk.W)
-    numbers_check = tk.Checkbutton(root, text="Numbers", variable=numbers_check_var)
-    numbers_check.pack(anchor=tk.W)
-    special_check = tk.Checkbutton(root, text="Special Characters", variable=special_check_var)
-    special_check.pack(anchor=tk.W)
+    upper_check = Checkbutton(password_window, text="Uppercase", variable=upper_check_var)
+    upper_check.pack(anchor=W)
+    lower_check = Checkbutton(password_window, text="Lowercase", variable=lower_check_var)
+    lower_check.pack(anchor=W)
+    numbers_check = Checkbutton(password_window, text="Numbers", variable=numbers_check_var)
+    numbers_check.pack(anchor=W)
+    special_check = Checkbutton(password_window, text="Special Characters", variable=special_check_var)
+    special_check.pack(anchor=W)
 
-    generate_button = tk.Button(root, text="Generate Password", command=generate_password)
+    generate_button = Button(password_window, text="Generate Password", command=generate_password)
     generate_button.pack(pady=10)
-    password_label = tk.Label(root, text="")
+    password_label = Label(password_window, text="")
     password_label.pack()
 
-    reset_button = tk.Button(root, text="Reset", command=reset_checkboxes)
+    reset_button = Button(password_window, text="Reset", command=reset_checkboxes)
     reset_button.pack(pady=5)
+
 
 #buttons for choice
 Button(root, text='MS Office Guide', command=guide).pack()
